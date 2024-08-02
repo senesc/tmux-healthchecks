@@ -26,7 +26,7 @@ get_data() {
 	fi
 	local cachefile=$(get_tmux_option "@healthchecks_cache_file" "/tmp/tmux-healthchecks-${api_key:0:6}")
 	if [[ -f "$cachefile" ]]; then
-		local ts=$(jq -r --from-file "$cachefile" 'try .timestamp catch 0')
+		local ts=$(jq -r 'try .timestamp catch 0' "$cachefile")
 		if [[ $(date +%s) -gt $((ts + interval)) ]]; then
 			update_cache "$cachefile" "$api_key"
 		fi
