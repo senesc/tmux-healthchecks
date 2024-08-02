@@ -19,23 +19,23 @@ this plugin provides the following status variables:
 ```
 #{healthchecks_down_number}
 #{healthchecks_status_icon}
+#{healthchecks_status_shorttext}
 TODO: #{healthchecks_status_color}
-TODO: #{healthchecks_status_shorttext}
 TODO: #{healthchecks_status_detailstext} ("all good" if everything's up, name of at least 1 down and total number of checks down otherwise)
 ```
 
 
 ### Customization
 ```
-TODO: @healthchecks_up_text UP
+@healthchecks_up_shorttext UP
 @healthchecks_up_icon 󰗶
 TODO: @healthchecks_up_style
 
-TODO: @healthchecks_down_text DOWN
+@healthchecks_down_shorttext DOWN
 @healthchecks_down_icon 
 TODO: @healthchecks_down_style
 
-TODO: @healthchecks_unknown_text unknown
+@healthchecks_unknown_shorttext unknown
 @healthchecks_unknown_icon ?
 TODO: @healthchecks_unknown_style
 ```

@@ -6,11 +6,13 @@ source "$CURRENT_DIR/scripts/options.sh"
 hc_interpolation_strings=(
 	"\#{healthchecks_status_icon}"
 	"\#{healthchecks_down_count}"
+	"\#{healthchecks_status_shorttext}"
 )
 
 hc_commands=(
 	"#($CURRENT_DIR/scripts/healthchecks_status_icon.sh)"
 	"#($CURRENT_DIR/scripts/healthchecks_down_count.sh)"
+	"#($CURRENT_DIR/scripts/healthchecks_status_shorttext.sh)"
 )
 
 
