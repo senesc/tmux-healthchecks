@@ -41,4 +41,7 @@ this plugin provides the following variables:
 # TODO:
 - check escaping
 - rename shorttext and detailstext
-- rename color to style
+- rename color to style or at least be consistent
+- implement endpoint stuff
+- sane defaults
+- consider adding a bell whenever anything goes down
