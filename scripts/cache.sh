@@ -13,18 +13,18 @@ parse_down_names() {
 update_cache() {
 	local response="$(curl --silent --header "X-Api-Key: $2" "https://healthchecks.io/api/v3/checks/")"
 
-	echo "{ \"timestamp\": $(date +%s), \"down_count\": $(parse_down_count "$response"), \"down_names\": $(parse_down_names "$response")}"
+	echo "{ \"timestamp\": $(date +%s), \"down_count\": $(parse_down_count "$response"), \"down_names\": $(parse_down_names "$response")}" > "$1"
 }
 
 # returns the content of the cache file (after fetching fresh data if necessary)
 get_data() {
-	local interval=$(get_tmux_option "@healthchecks_update_interval" "300")
-	local api_key=$(get_tmux_option "@healthchecks_api_key")
+	local interval="$(get_tmux_option "@healthchecks_update_interval" "300")"
+	local api_key="$(get_tmux_option "@healthchecks_api_key")"
 
 	if [[ -z "$api_key" ]]; then
 		return 1
 	fi
-	local cachefile=$(get_tmux_option "@healthchecks_cache_file" "/tmp/tmux-healthchecks-${api_key:0:6}")
+	local cachefile="$(get_tmux_option "@healthchecks_cache_file" "/tmp/tmux-healthchecks-${api_key:0:6}")"
 	if [[ -f "$cachefile" ]]; then
 		local ts=$(jq -r 'try .timestamp catch 0' "$cachefile")
 		if [[ $(date +%s) -gt $((ts + interval)) ]]; then

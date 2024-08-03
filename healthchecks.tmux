@@ -40,5 +40,6 @@ interpolate_tmux_option() {
 main() {
 	interpolate_tmux_option "status-right"
 	interpolate_tmux_option "status-left"
+	tmux bind-key -N "Force refresh Healthchecks status" "$(get_tmux_option "@healthchecks_refresh_key" "H")" "run-shell $CURRENT_DIR/scripts/healthchecks_refresh.sh"
 }
 main

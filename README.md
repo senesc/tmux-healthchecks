@@ -34,16 +34,21 @@ set -g @healthchecks_cache_file "/tmp/my/path"
 ```
 By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 chars of your API key, as to allow different sessions to monitor different projects.
 
+Status updates can be forced: the default keybind is `prefix + H`, but it can be changed with the following option:
+```
+set -g @healthchecks_update_key H
+```
+
 ### Usage
 After configuring at least the API key, you can include one or more of the variables provided to your status bar config, e.g.:
 ```
 set -ag status-right "#{healthchecks_status_icon} #{healthchecks_status_details}"
 ```
 The provided variables are:
-- `#{healthchecks_down_count}`: displays the number of checks that are down
+- `#{healthchecks_down_count}`: the number of checks that are down
 - `#{healthchecks_status_icon}`
-- `#{healthchecks_status_details}` when something's down shows something like "down-check-slug & 3 others"
 - `#{healthchecks_status_short}`: "UP" or "DOWN"
+- `#{healthchecks_status_details}`: lets you know which check is down and how many are down in total
 - `#{healthchecks_icon_style}`
 - `#{healthchecks_text_style}`
 
