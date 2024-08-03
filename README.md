@@ -42,26 +42,26 @@ set -ag status-right "#{healthchecks_status_icon} #{healthchecks_status_details}
 The provided variables are:
 - `#{healthchecks_down_count}`: displays the number of checks that are down
 - `#{healthchecks_status_icon}`
-- `#{healthchecks_status_shorttext}`
 - `#{healthchecks_status_details}` when something's down shows something like "down-check-slug & 3 others"
+- `#{healthchecks_status_short}`: "UP" or "DOWN"
 - `#{healthchecks_icon_style}`
 - `#{healthchecks_text_style}`
 
 ### Customization
 These are the options (along with their defaults) that you can set to customize the output. "Up" means all checks are up. If any check is down, "Down" is displayed. If the network is not reachable or there's any error, the output is determined by "Unknown".
 ```
-set -g @healthchecks_up_shorttext "UP"
+set -g @healthchecks_up_short "UP"
 set -g @healthchecks_up_details "all UP"
 set -g @healthchecks_up_icon "󰗶"
 set -g @healthchecks_up_icon_style
 set -g @healthchecks_up_text_style
 
-set -g @healthchecks_down_shorttext "DOWN"
+set -g @healthchecks_down_short "DOWN"
 set -g @healthchecks_down_icon ""
 set -g @healthchecks_down_icon_style
 set -g @healthchecks_down_text_style
 
-set -g @healthchecks_unknown_shorttext "unknown"
+set -g @healthchecks_unknown_short "unknown"
 set -g @healthchecks_unknown_details "unknown"
 set -g @healthchecks_unknown_icon "?"
 set -g @healthchecks_unknown_icon_style
@@ -80,7 +80,6 @@ Styles all default to `status-style` and can be set to something like `"#[fg=gre
 ```
 
 - check escaping
-- rename shorttext
 - implement endpoint stuff
 - sane defaults
 - add a bell/message whenever anything goes down
