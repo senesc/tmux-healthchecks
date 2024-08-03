@@ -4,17 +4,19 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/scripts/options.sh"
 
 hc_interpolation_strings=(
-	"\#{healthchecks_status_icon}"
 	"\#{healthchecks_down_count}"
+	"\#{healthchecks_status_icon}"
 	"\#{healthchecks_status_shorttext}"
+	"\#{healthchecks_status_details}"
 	"\#{healthchecks_icon_style}"
 	"\#{healthchecks_text_style}"
 )
 
 hc_commands=(
-	"#($CURRENT_DIR/scripts/healthchecks_status_icon.sh)"
 	"#($CURRENT_DIR/scripts/healthchecks_down_count.sh)"
+	"#($CURRENT_DIR/scripts/healthchecks_status_icon.sh)"
 	"#($CURRENT_DIR/scripts/healthchecks_status_shorttext.sh)"
+	"#($CURRENT_DIR/scripts/healthchecks_status_details.sh)"
 	"#($CURRENT_DIR/scripts/healthchecks_style.sh icon)"
 	"#($CURRENT_DIR/scripts/healthchecks_style.sh text)"
 )
