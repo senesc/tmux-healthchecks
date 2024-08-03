@@ -49,14 +49,21 @@ These are the options (along with their defaults) that you can set to customize 
 ```
 set -g @healthchecks_up_shorttext "UP"
 set -g @healthchecks_up_icon "󰗶"
+set -g @healthchecks_up_icon_style
+set -g @healthchecks_up_text_style
 
 set -g @healthchecks_down_shorttext "DOWN"
 set -g @healthchecks_down_icon ""
+set -g @healthchecks_down_icon_style
+set -g @healthchecks_down_text_style
 
 set -g @healthchecks_unknown_shorttext "unknown"
 set -g @healthchecks_unknown_icon "?"
+set -g @healthchecks_unknown_icon_style
+set -g @healthchecks_unknown_text_style
 ```
 
+Styles all default to `status-style` and can be set to something like `"#[fg=green,bg=default,bold]"`
 
 ---
 
