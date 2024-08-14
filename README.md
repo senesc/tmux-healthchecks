@@ -1,10 +1,13 @@
 # WIP: tmux-healthchecks
 Monitor your [Healthchecks](https://healthchecks.io) project from within tmux!
 > [!WARNING]
-> This repository is a work in progress, and variable names, option names etc. are likely to change any moment. Feel free to try it out though! What isn't in the TODO section has already been implemented and should work.
+> This repository is a work in progress, so option names etc. are likely to change any moment. Feel free to try it out though! What isn't in the TODO section has already been implemented and should work.
 
-<details>
-<summary><h2>Installing</h2></summary>
+## Features
+- Responses are cached to make fewer requests
+- 
+
+## Installing
 
 This plugin requires `jq`.
 ### Installing with TPM (recommended)
@@ -21,77 +24,59 @@ This plugin requires `jq`.
    run-shell "~/path/to/repo/healthchecks.tmux"
    ```
 3. Reload your config or restart tmux
-</details>
 
-## Usage
-Among most plugin components there are three possible statuses to determine icons, text, styles etc.:
+## Usage and customization
+For this plugin to work, you must create a read-only API key from your project settings page, and put it in the <code>@healthchecks_api_key</code> variable:
+```
+set -g @healthchecks_api_key "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+There are three possible statuses to determine icons, text, styles etc.:
 - **Up**: when all checks of the project are up
 - **Down**: when at least one check is down
-- **Unknown**: when the network is not reachable, the API key is missing or any error occurs
+- **Unknown**: when the network is not reachable, the API key is missing or any error occurs.
 
-After setting at least your API key (see Configuration and customization), this is what the plugin provides:
 ### Status bar variables
-- `#{healthchecks_down_count}`: the number of checks that are currently down
-- `#{healthchecks_status_icon}`: an icon representing the status
-- `#{healthchecks_status_short}`: a static message, by default "UP" or "DOWN"
-- `#{healthchecks_status_details}`: lets you know which check is down and how many are down in total
-- `#{healthchecks_icon_style}`
-- `#{healthchecks_text_style}`
+<h4><code>#{healthchecks_down_count}</code></h4>
+The number of checks that are currently down.
 
-you can use these in your config, for example, by appending them to your `status-right`:
+<h4><code>#{healthchecks_status_icon}</code></h4>
+An icon representing the status, by default "&lt;3", "&lt;/3" and "?" respectively for <i>up</i>, <i>down</i> and <i>unknown</i>. Can be changed by setting the <code>@healthchecks_up_icon</code>, <code>@healthchecks_down_icon</code> and <code>@healthchecks_unknown_icon</code> options.
+
+<h4><code>#{healthchecks_status_short}</code></h4>
+A static message, by default "UP", "DOWN" or "unknown". Can be changed by setting <code>@healthchecks_up_short</code>, <code>@healthchecks_down_short</code> and <code>@healthchecks_unknown_short</code>.
+<h4><code>#{healthchecks_status_details}</code></h4>
+If at least one check is down shows its slug and how many are down in total (e.g. <i>office-backup & 2 others</i>). Otherwise, defaults are "all UP" and "unknown". While the <i>down</i> text is fixed, the latter two can be changed by setting <code>@healthchecks_up_details</code> and <code>@healthchecks_unknown_details</code>.
+
+<h4><code>#{healthchecks_icon_style}</code></h4>
+Style that should be associated with the icon, depends on current status. Defaults to the value of <code>status-style</code> and can be changed by setting <code>@healthchecks_up_icon_style</code>, <code>@healthchecks_down_icon_style</code> and <code>@healthchecks_unknown_icon_style</code> to something like <code>"#[fg=green,bg=default,bold]"</code>.
+
+<h4><code>#{healthchecks_text_style}</code></h4>
+The same as above, except this is intended to be used with short/details text. Style options are <code>@healthchecks_up_text_style</code>, <code>@healthchecks_down_text_style</code> and <code>@healthchecks_unknown_text_style</code>.
+
+<hr>
+
+You can use these in your config, for example, by appending them to your `status-right`:
 ```
 set -ag status-right "#{healthchecks_icon_style}#{healthchecks_status_icon} #{healthchecks_text_style}#{healthchecks_status_details}"
 ```
 
-### Keybinds
-- `prefix + H` to force the refresh (see Cache)
-- `prefix + D` to show the list of all checks that are currently down.
+### Keybindings
+- `prefix + H` to show the list of all checks along with their statuses. Can be changed by setting `@healthchecks_list_key`
+- `prefix + Alt-h` to force the refresh (see Cache). Key can be changed by setting `@healthchecks_update_key`
 
-## Configuration and customization
-For this plugin to work, you must create a read-only API key from your project settings page, and put it in the `@healthchecks_api_key` variable:
-```
-set -g @healthchecks_api_key "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-```
 ### Cache
-Since refreshing the project status every 15 seconds (or whatever is set in your `status-interval` option) is kinda useless and would probably get you a *429 too many requests* pretty quickly, this plugin caches the API response and allows setting an independent update interval:
+Since refreshing the project status every 15 seconds (or whatever is set in your `status-interval` option) is kinda useless and would probably get you a *429 too many requests* pretty quickly, this plugin caches the API response and sets an independent update interval:
 ```
 set -g @healthchecks_update_interval [seconds]
 ```
 Please note that this value can't be lower than `status-interval`, because the actual UI updates depend on that. The default value is 300 seconds (or 5 minutes).
 
-With `@healthchecks_cache_file` you can customize where the cache is stored:
+With <code>@healthchecks_cache_file</code> you can customize where the cache is stored:
 ```
 set -g @healthchecks_cache_file "/tmp/my/path"
 ```
-By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 chars of your API key, which allows different sessions to monitor different projects.
-
-### Changing keybinds
-Status updates can be forced: the default keybind is `prefix + H`, but it can be changed with the following option:
-```
-set -g @healthchecks_update_key H
-```
-
-### Customization
-These are the options (along with their defaults) that you can set to customize the output.
-```
-set -g @healthchecks_up_short "UP"
-set -g @healthchecks_up_details "all UP"
-set -g @healthchecks_up_icon "󰗶"
-set -g @healthchecks_up_icon_style
-set -g @healthchecks_up_text_style
-
-set -g @healthchecks_down_short "DOWN"
-set -g @healthchecks_down_icon ""
-set -g @healthchecks_down_icon_style
-set -g @healthchecks_down_text_style
-
-set -g @healthchecks_unknown_short "unknown"
-set -g @healthchecks_unknown_details "unknown"
-set -g @healthchecks_unknown_icon "?"
-set -g @healthchecks_unknown_icon_style
-set -g @healthchecks_unknown_text_style
-```
-Styles all default to `status-style` and can be set to something like `"#[fg=green,bg=default,bold]"`. The `down_details` text can't be changed and contains the name of the latest check to go off and the number of other checks currently down (e.g. *office-backup & 2 others*).
+By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 characters of your API key, which allows different tmux sessions to monitor different projects.
 
 ---
 
@@ -100,12 +85,9 @@ Styles all default to `status-style` and can be set to something like `"#[fg=gre
 @healthchecks_api_endpoint
 @healchchecks_display_down
 @healthchecks_bell_down
-@healthchecks_list_key
 ```
 
-- check escaping
 - make the check shown in details the latest one to go off
-- implement down list (and related keybind) (make it one per line, with nice formatting and colors) (maybe list all checks, not just down ones)
 - implement endpoint stuff
 - sane defaults
 - add a bell/message whenever anything goes down
@@ -115,3 +97,4 @@ Styles all default to `status-style` and can be set to something like `"#[fg=gre
 - add a xdg-open healthchecks.io keybind
 - how can one disable keybinds?
 - add screenshots
+- correct whatever bug creates the /tmp/tmux-healthchecks- file
