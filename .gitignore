@@ -1,2 +1,2 @@
-testenv/api_key.conf
+test/api_key.conf
 **.log
