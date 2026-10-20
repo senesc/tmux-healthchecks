@@ -36,6 +36,12 @@ There are three possible statuses to determine icons, text, styles etc.:
 - **Down**: when at least one check is down
 - **Unknown**: when the network is not reachable, the API key is missing or any error occurs.
 
+<h4><code>@healthchecks_endpoint</code></h4>
+If you self-host Healthchecks, set this to the base URL of your instance (the same address you open in the browser, without `/api/...`). Default value is `https://healthchecks.io`.
+```
+set -g @healthchecks_endpoint "https://hc.example.com"
+```
+
 ### Status bar variables
 <h4><code>#{healthchecks_down_count}</code></h4>
 The number of checks that are currently down.
@@ -82,13 +88,11 @@ By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 cha
 
 ## TODO:
 ```
-@healthchecks_api_endpoint
 @healchchecks_display_down
 @healthchecks_bell_down
 ```
 
 - make the check shown in details the latest one to go off
-- implement endpoint stuff
 - sane defaults
 - add a bell/message whenever anything goes down
 - add some kind of persistence such that when you log into tmux you get notified of checks that went down while you were offline

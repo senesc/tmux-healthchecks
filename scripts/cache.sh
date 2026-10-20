@@ -11,7 +11,9 @@ parse_down_names() {
 
 # wants cache file path and api key
 update_cache() {
-	local response="$(curl --silent --header "X-Api-Key: $2" "https://healthchecks.io/api/v3/checks/")"
+	local api_key=$(get_tmux_option "@healthchecks_api_key")
+	local cachefile=$(get_tmux_option "@healthchecks_cache_file")
+	local response="$(curl --silent --header "X-Api-Key: $api_key" "$(get_tmux_option "@healthchecks_endpoint" "https://healthchecks.io")/api/v3/checks/")"
 
 	echo "{ \"timestamp\": $(date +%s), \"down_count\": $(parse_down_count "$response"), \"down_names\": $(parse_down_names "$response")}" > "$1"
 }
