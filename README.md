@@ -25,8 +25,8 @@ This plugin requires `jq`.
    ```
 3. Reload your config or restart tmux
 
-## Usage and customization
-For this plugin to work, you must create a read-only API key from your project settings page, and put it in the <code>@healthchecks_api_key</code> variable:
+## Configuration and customization
+For this plugin to work you must create a read-only API key from your project settings page, and assign it to the <code>@healthchecks_api_key</code> variable:
 ```
 set -g @healthchecks_api_key "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
@@ -63,7 +63,7 @@ set -ag status-right "#{healthchecks_icon_style}#{healthchecks_status_icon} #{he
 
 ### Keybindings
 - `prefix + H` to show the list of all checks along with their statuses. Can be changed by setting `@healthchecks_list_key`
-- `prefix + Alt-h` to force the refresh (see Cache). Key can be changed by setting `@healthchecks_update_key`
+- `prefix + Alt-h` to force the refresh (see Cache). Key can be changed by setting `@healthchecks_refresh_key`
 
 ### Cache
 Since refreshing the project status every 15 seconds (or whatever is set in your `status-interval` option) is kinda useless and would probably get you a *429 too many requests* pretty quickly, this plugin caches the API response and sets an independent update interval:
