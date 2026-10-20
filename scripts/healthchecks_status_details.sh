@@ -9,11 +9,11 @@ healthchecks_status_details() {
 	if [[ "$down_count" -eq 0 ]]; then
 		get_tmux_option "@healthchecks_up_details" "all UP"
 	elif [[ "$down_count" -eq 1 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names.[0] catch "error"') down"
+		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') down"
 	elif [[ "$down_count" -eq 2 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names.[0] catch "error"') & $((down_count - 1)) other"
+		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') & $((down_count - 1)) other"
 	elif [[ "$down_count" -gt 2 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names.[0] catch "error"') & $((down_count - 1)) others"
+		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') & $((down_count - 1)) others"
 	else
 		get_tmux_option "@healthchecks_unknown_details" "unknown"
 	fi

@@ -3,10 +3,10 @@ source "$CURRENT_DIR/options.sh"
 
 # the following two accept the json response as first and only parameter
 parse_down_count() {
-	echo "$1" | jq -r 'try ([.checks.[].status | select(. == "down")] | length) catch -1'
+	echo "$1" | jq -r 'try ([.checks[].status | select(. == "down")] | length) catch -1'
 }
 parse_down_names() {
-	echo "$1" | jq -rc 'try [.checks.[] | select(.status == "down") | .slug] catch "error"'
+	echo "$1" | jq -rc 'try [.checks[] | select(.status == "down") | .slug] catch "error"'
 }
 
 # wants cache file path and api key
@@ -15,7 +15,7 @@ update_cache() {
 	local cachefile=$(get_tmux_option "@healthchecks_cache_file")
 	local response="$(curl --silent --header "X-Api-Key: $api_key" "$(get_tmux_option "@healthchecks_endpoint" "https://healthchecks.io")/api/v3/checks/")"
 
-	echo "{ \"timestamp\": $(date +%s), \"down_count\": $(parse_down_count "$response"), \"down_names\": $(parse_down_names "$response")}" > "$1"
+	echo "{ \"timestamp\": $(date +%s), \"down_count\": $(parse_down_count "$response"), \"down_names\": $(parse_down_names "$response")}" > "$cachefile"
 }
 
 # returns the content of the cache file (after fetching fresh data if necessary)
