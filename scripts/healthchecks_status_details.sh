@@ -5,18 +5,25 @@ source "$CURRENT_DIR/options.sh"
 
 healthchecks_status_details() {
 	local data=$(get_data)
-	local down_count=$(echo "$data" | jq -r 'try .down_count catch -1')
-	if [[ "$down_count" -eq 0 ]]; then
-		get_tmux_option "@healthchecks_up_details" "all UP"
-	elif [[ "$down_count" -eq 1 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') down"
-	elif [[ "$down_count" -eq 2 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') & $((down_count - 1)) other"
-	elif [[ "$down_count" -gt 2 ]]; then
-		echo "$(echo "$data" | jq -r 'try .down_names[0] catch "error"') & $((down_count - 1)) others"
-	else
-		get_tmux_option "@healthchecks_unknown_details" "unknown"
-	fi
+	case "$(printf '%s\n' "$data" | hc_status)" in
+		up)
+			get_tmux_option "@healthchecks_up_details" "all UP"
+			;;
+		down)
+			local slug="$(printf '%s\n' "$data" | first_down_slug)"
+			local others=$(( $(printf '%s\n' "$data" | down_count) - 1 ))
+			if (( others == 0 )); then
+				echo "$slug down"
+			elif (( others == 1 )); then
+				echo "$slug & 1 other"
+			else
+				echo "$slug & $others others"
+			fi
+			;;
+		*)
+			get_tmux_option "@healthchecks_unknown_details" "unknown"
+			;;
+	esac
 }
 
 healthchecks_status_details

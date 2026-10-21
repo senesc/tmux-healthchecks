@@ -78,6 +78,11 @@ set -g @healthchecks_update_interval [seconds]
 ```
 Please note that this value can't be lower than `status-interval`, because the actual UI updates depend on that. The default value is 300 seconds (or 5 minutes).
 
+If the last update failed (status *unknown*, e.g. no connection), the plugin retries sooner, every 30 seconds by default:
+```
+set -g @healthchecks_retry_interval [seconds]
+```
+
 With <code>@healthchecks_cache_file</code> you can customize where the cache is stored:
 ```
 set -g @healthchecks_cache_file "/tmp/my/path"
