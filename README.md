@@ -1,7 +1,5 @@
-# WIP: tmux-healthchecks
+# tmux-healthchecks
 Monitor your [Healthchecks](https://healthchecks.io) project from within tmux!
-> [!WARNING]
-> This repository is a work in progress, so option names etc. are likely to change any moment. Feel free to try it out though! What isn't in the TODO section has already been implemented and should work.
 
 ## Features
 - Responses are cached to make fewer requests
@@ -87,7 +85,7 @@ With <code>@healthchecks_cache_file</code> you can customize where the cache is 
 ```
 set -g @healthchecks_cache_file "/tmp/my/path"
 ```
-By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 characters of your API key, which allows different tmux sessions to monitor different projects.
+By default, it is saved as `tmux-healthchecks-xxxxxx` in `$XDG_RUNTIME_DIR` if set, falling back to `$TMPDIR` (for macOS) or `/tmp`. Each project gets its own cache file, as to allow different tmux sessions to monitor different projects.
 
 ---
 
@@ -97,13 +95,9 @@ By default, it is saved to `/tmp/tmux-healthchecks-` followed by the first 6 cha
 @healthchecks_bell_down
 ```
 
-- make the check shown in details the latest one to go off
-- sane defaults
 - add a bell/message whenever anything goes down
-- add some kind of persistence such that when you log into tmux you get notified of checks that went down while you were offline
-- test it with tpm installation
+- add some kind of persistence: get notified about what went wrong while you were away
 - make a catppuccin/etc. plugin compat script
 - add a xdg-open healthchecks.io keybind
 - how can one disable keybinds?
 - add screenshots
-- correct whatever bug creates the /tmp/tmux-healthchecks- file
